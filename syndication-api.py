@@ -33,6 +33,9 @@ class Syndication(object):
     def get_channel_deliveries(self, channel_id=None):
         return self.__send_request__(endpoint='/channels/{channel_id}/deliveries'.format(channel_id=channel_id), method='GET', headers=self.headers)
 
+    def get_channel_downloads(self, delivery_id=None):
+        return self.__send_request__(endpoint='/downloads/{delivery_id}'.format(delivery_id=delivery_id), method='GET', headers=self.headers)
+
 if __name__ == '__main__':
     s = Syndication()
     #print(s.get_channels())
