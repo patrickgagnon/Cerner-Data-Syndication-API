@@ -38,6 +38,11 @@ class Syndication(object):
 
     def get_channel_downloads(self, delivery_id=None, destination_path=None):
         return self.__send_request__(endpoint='/downloads/{delivery_id}'.format(delivery_id=delivery_id), method='GET', headers=self.headers)
+        #cd=os.getcwd()
+        #temp=tarfile.open(name=destination_path, mode='r:gz')
+        # if downloads.status_code == 200:
+        #    with open(path, 'wb') as f:
+        #        f.write(downloads.content)
 
 if __name__ == '__main__':
     s = Syndication()
