@@ -42,14 +42,14 @@ class Syndication(object):
         return self.__send_request__(endpoint='/channels/{channel_id}/deliveries'.format(channel_id=channel_id), method='GET', headers=self.headers)
 
     def get_channel_downloads(self, delivery_id=None, destination_path=None):
-        response=self.__send_request__(endpoint='/downloads/{delivery_id}'.format(delivery_id=delivery_id), method='GET', headers=self.headers)
+        response = self.__send_request__(endpoint='/downloads/{delivery_id}'.format(delivery_id=delivery_id), method='GET', headers=self.headers)
         wd=os.getcwd()
-        path= destination_path+dt.datetime.strftime(dt.datetime.today(), '%Y-%m-%d') +'.tar'
+        path= destination_path + dt.datetime.strftime(dt.datetime.today(), '%Y-%m-%d') + '.tar.gz'
 
 
         with open(path, 'wb') as i:
-            i.write(response.content)
-            i.close()
+            i.write(response)
+        i.close()
 
         temp=tarfile.open(name=path, mode='r:gz')
         os.chdir(destination_path)
