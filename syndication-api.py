@@ -22,10 +22,8 @@ class Syndication(object):
             return requests.get('{uri}{endpoint}'.format(uri=self.uri, endpoint=endpoint), headers=headers,
                                 params=params).json()
         else:
-            if json:
-                return requests.get('{uri}{endpoint}'.format(uri=self.uri, endpoint=endpoint), headers=headers,json=json)
-            else:
-                return requests.post('{uri}{endpoint}'.format(uri=self.uri, endpoint=endpoint), headers=headers)
+            return requests.get('{uri}{endpoint}'.format(uri=self.uri, endpoint=endpoint), headers=headers,
+                                    json=json)
 
     def get_feeds(self):
         return self.__send_request__(endpoint='/feeds', method='GET', headers=self.headers)
@@ -41,15 +39,12 @@ class Syndication(object):
         return self.__send_request__(endpoint='/channels/{channel_id}/deliveries'.format(channel_id=channel_id),
                                      method='GET', headers=self.headers)
 
-    def get_channel_downloads(self, delivery_id = None, destination_path = None, json=None):
-        #response = self.__send_request__(endpoint='/downloads/{delivery_id}'.format(delivery_id=delivery_id),method='POST', headers=self.headers, json=json)
-        response = requests.get('https://wny.api.us.healtheintent.com/data-syndication/v1/downloads/' + delivery_id,
-                                 headers=BEARER_HEADER)
+    def get_channel_downloads(self, delivery_id = None, destination_path = None):
+        response = self.__send_request__(endpoint='/downloads/{delivery_id}'.format(delivery_id=delivery_id), headers=self.headers)
 
 
         wd = os.getcwd()
         path = destination_path + '/' + dt.datetime.strftime(dt.datetime.today(), '%Y-%m-%d') + '.tar.gz'
-        #print(response.__dict__)
 
         if response.status_code == 200:
             with open(path, 'wb') as i:
@@ -62,13 +57,7 @@ class Syndication(object):
         temp.close()
         os.chdir(wd)
 
-    def get_channel_downloads2(self, delivery_id = None, destination_path = None):
-        return self.__send_request__(endpoint='/downloads/{delivery_id}'.format(delivery_id=delivery_id), method='GET',headers=self.headers)
-
-
 if __name__ == '__main__':
     s = Syndication()
     s.get_channel_downloads(delivery_id='217a4ee0-bb87-4877-a017-83880b5ee399',destination_path=TEST_PATH)
 
-    # print(s.get_channels())
-    #print(s.get_channel_deliveries(channel_id='83bec28a-b367-41c2-b468-7d8d6dd92f0c'))
